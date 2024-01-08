@@ -1,0 +1,8 @@
+# URL生成
+入力されたスニペットに対して、SHA-256でIDを生成する。
+IDをクエリストリングで指定することで、対応するスニペットを取得する。
+
+# URLパターン
+http://localhost:8000/TextSnippetSharingService/editor
+http://localhost:8000/TextSnippetSharingService/snippet?id=<hash>
+
