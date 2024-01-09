@@ -1,8 +1,11 @@
 <?php
 spl_autoload_extensions(".php");
+// autoloadはこのファイルを実行するプロセスの作業ディレクトリを基準にする
 spl_autoload_register(function ($class) {
     $class = str_replace("\\", "/", $class);
     $file = $class . '.php';
+    // file_put_contents(__DIR__ . "/../test/debug.txt", $file);
+    // echo $file;
     if (file_exists($file)) {
         require_once $file;
     }

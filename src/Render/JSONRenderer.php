@@ -2,7 +2,7 @@
 
 namespace Render;
 
-use Render\HTTPRenderer;
+use Render\interface\HTTPRenderer;
 
 class JSONRenderer implements HTTPRenderer
 {

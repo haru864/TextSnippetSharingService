@@ -15,11 +15,4 @@ class MySQLWrapper extends mysqli
         $database = $database ?? Config::env('DATABASE_NAME');
         parent::__construct($hostname, $username, $password, $database, $port, $socket);
     }
-
-    public function getSnippetById(string $id): string
-    {
-        $sql = sprintf("SELECT snippet FROM snippet WHERE id = '%s'", $id);
-        $snippet = $this->query($sql)->fetch_row()[0];
-        return $snippet;
-    }
 }

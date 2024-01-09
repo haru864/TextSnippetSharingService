@@ -2,7 +2,7 @@
 
 namespace Render;
 
-use Render\HTTPRenderer;
+use Render\interface\HTTPRenderer;
 
 class HTMLRenderer implements HTTPRenderer
 {
@@ -25,36 +25,17 @@ class HTMLRenderer implements HTTPRenderer
     public function getContent(): string
     {
         $viewPath = $this->getViewPath($this->viewFile);
-
         if (!file_exists($viewPath)) {
             throw new \Exception("View file {$viewPath} does not exist.");
         }
-
-        // ob_startはすべての出力をバッファに取り込みます。
-        // このバッファはob_get_cleanによって取得することができ、バッファの内容を返し、バッファをクリアします。
         ob_start();
-        // extract関数は、キーを変数として現在のシンボルテーブルにインポートします
         extract($this->data);
         require $viewPath;
-        return $this->getHeader() . ob_get_clean() . $this->getFooter();
-    }
-
-    private function getHeader(): string
-    {
-        ob_start();
-        require $this->getViewPath('layout/header');
-        return ob_get_clean();
-    }
-
-    private function getFooter(): string
-    {
-        ob_start();
-        require $this->getViewPath('layout/footer');
         return ob_get_clean();
     }
 
     private function getViewPath(string $path): string
     {
-        return sprintf("%s/%s/Views/%s.php", __DIR__, '../..', $path);
+        return sprintf("%s/%s/View/%s.php", __DIR__, '..', $path);
     }
 }
