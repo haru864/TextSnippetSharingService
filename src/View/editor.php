@@ -40,7 +40,7 @@
         </select>
     </div>
     <div class="container">
-        <div id="editor-container" style="width:800px;height:600px;border:1px solid grey"></div>
+        <div id="editor" style="width:800px;height:600px;border:1px solid grey"></div>
     </div>
     <button type="button" id="submit-btn">Submit</button>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
@@ -51,7 +51,7 @@
             }
         });
         require(['vs/editor/editor.main'], function() {
-            window.editor = monaco.editor.create(document.getElementById('editor-container'), {
+            window.editor = monaco.editor.create(document.getElementById('editor'), {
                 value: '',
                 language: 'cpp'
             });
@@ -61,70 +61,36 @@
             let editor_model = window.editor.getModel();
             monaco.editor.setModelLanguage(editor_model, language);
         });
-        // async function convertMarkdownToHTML() {
-        //     try {
-        //         var details = {
-        //             'md_src': window.editor.getValue()
-        //         };
-        //         var formBody = [];
-        //         for (var property in details) {
-        //             var encodedKey = encodeURIComponent(property);
-        //             var encodedValue = encodeURIComponent(details[property]);
-        //             formBody.push(encodedKey + "=" + encodedValue);
-        //         }
-        //         formBody = formBody.join("&");
-        //         const response = await fetch('http://localhost:8081', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/x-www-form-urlencoded'
-        //             },
-        //             body: formBody
-        //         });
-        //         if (!response.ok) {
-        //             throw new Error(`HTTP error! status: ${response.status}`);
-        //         }
-        //         const data = await response.json();
-        //         return data["html"];
-        //     } catch (error) {
-        //         console.error('Error:', error);
-        //     }
-        // }
-        // document.getElementById("download-btn").addEventListener("click", async function() {
-        //     try {
-        //         var details = {
-        //             'action': 'download',
-        //             'md_src': window.editor.getValue()
-        //         };
-        //         var formBody = [];
-        //         for (var property in details) {
-        //             var encodedKey = encodeURIComponent(property);
-        //             var encodedValue = encodeURIComponent(details[property]);
-        //             formBody.push(encodedKey + "=" + encodedValue);
-        //         }
-        //         formBody = formBody.join("&");
-        //         const response = await fetch('http://localhost:8081', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/x-www-form-urlencoded'
-        //             },
-        //             body: formBody
-        //         });
-        //         if (!response.ok) {
-        //             throw new Error(`HTTP error! status: ${response.status}`);
-        //         }
-        //         const blob = await response.blob();
-        //         const url = window.URL.createObjectURL(blob);
-        //         const a = document.createElement('a');
-        //         a.style.display = 'none';
-        //         a.href = url;
-        //         a.download = 'MarkdownToHTML.html';
-        //         document.body.appendChild(a);
-        //         a.click();
-        //         window.URL.revokeObjectURL(url);
-        //     } catch (error) {
-        //         console.error('Error:', error);
-        //     }
-        // });
+        document.getElementById("submit-btn").addEventListener("click", async function() {
+            try {
+                var details = {
+                    'snippet': window.editor.getValue(),
+                    'language': document.getElementById('language').value
+                };
+                var formBody = [];
+                for (var property in details) {
+                    var encodedKey = encodeURIComponent(property);
+                    var encodedValue = encodeURIComponent(details[property]);
+                    formBody.push(encodedKey + "=" + encodedValue);
+                }
+                formBody = formBody.join("&");
+                const response = await fetch('http://localhost:8000/TextSnippetSharingService/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: formBody
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                alert(data['url']);
+            } catch (error) {
+                console.error('Error:', error);
+                alert(`Error: ${error}`);
+            }
+        });
     </script>
 </body>
 

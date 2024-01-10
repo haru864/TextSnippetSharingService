@@ -8,7 +8,7 @@ class Config
 
     public static function env(string $pair): string
     {
-        $config = parse_ini_file(dirname(__FILE__, 2) . '/config/' . self::ENV_PATH);
+        $config = parse_ini_file(__DIR__ . '/' . self::ENV_PATH);
         if ($config === false) {
             throw new \Exception("ERROR: .env not found");
         }
