@@ -6,6 +6,8 @@ use Render\interface\HTTPRenderer;
 use Render\HTMLRenderer;
 use Render\JSONRenderer;
 
+DatabaseHelper::deleteExpiredSnippets();
+
 return [
     'TextSnippetSharingService/editor' => function (): HTTPRenderer {
         return new HTMLRenderer('editor', []);
@@ -19,8 +21,10 @@ return [
         return new JSONRenderer(['url' => $url]);
     },
     'TextSnippetSharingService/display' => function (): HTTPRenderer {
-        $id = ValidationHelper::string($_GET['hash'] ?? null);
-        $part = DatabaseHelper::getSnippetById($id);
-        return new HTMLRenderer('component/part', ['part' => $part]);
-    },
+        $hash_value = ValidationHelper::string($_GET['hash'] ?? null);
+        $result = DatabaseHelper::getSnippetAndLanguageByHashValue($hash_value);
+        $snippet = $result[0];
+        $language = $result[1];
+        return new HTMLRenderer('snippet', ['snippet' => $snippet, 'language' => $language]);
+    }
 ];
