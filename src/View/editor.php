@@ -19,6 +19,7 @@
 
 <body>
     <div>
+        programming language:
         <select id="language" required>
             <option value="cpp" selected>cpp</option>
             <option value="csharp">csharp</option>
@@ -37,6 +38,15 @@
             <option value="scala">scala</option>
             <option value="swift">swift</option>
             <option value="typescript">typescript</option>
+        </select>
+    </div>
+    <div>
+        effective date:
+        <select id="term_minute" required>
+            <option value="10" selected>10 minutes</option>
+            <option value="60">1 hours</option>
+            <option value="1440">1 day</option>
+            <option value="-1">permanence</option>
         </select>
     </div>
     <div class="container">
@@ -65,7 +75,8 @@
             try {
                 var details = {
                     'snippet': window.editor.getValue(),
-                    'language': document.getElementById('language').value
+                    'language': document.getElementById('language').value,
+                    'term_minute': document.getElementById('term_minute').value
                 };
                 var formBody = [];
                 for (var property in details) {

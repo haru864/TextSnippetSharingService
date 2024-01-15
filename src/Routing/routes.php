@@ -15,8 +15,9 @@ return [
     'TextSnippetSharingService/register' => function (): HTTPRenderer {
         $snippet = ValidationHelper::string($_POST['snippet'] ?? null);
         $language = ValidationHelper::string($_POST['language'] ?? null);
+        $term_minute = ValidationHelper::integer($_POST['term_minute'] ?? null);
         $hash_value = hash('sha256', $snippet);
-        DatabaseHelper::insertSnippet($hash_value, $snippet, $language);
+        DatabaseHelper::insertSnippet($hash_value, $snippet, $language, $term_minute);
         $url = "http://localhost:8000/TextSnippetSharingService/display?hash={$hash_value}";
         return new JSONRenderer(['url' => $url]);
     },
