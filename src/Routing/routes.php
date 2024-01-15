@@ -24,6 +24,9 @@ return [
     'TextSnippetSharingService/display' => function (): HTTPRenderer {
         $hash_value = ValidationHelper::string($_GET['hash'] ?? null);
         $result = DatabaseHelper::getSnippetAndLanguageByHashValue($hash_value);
+        if (!$result) {
+            return new HTMLRenderer('expired', []);
+        }
         $snippet = $result[0];
         $language = $result[1];
         return new HTMLRenderer('snippet', ['snippet' => $snippet, 'language' => $language]);

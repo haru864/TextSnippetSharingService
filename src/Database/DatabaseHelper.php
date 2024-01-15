@@ -25,7 +25,7 @@ class DatabaseHelper
         return;
     }
 
-    public static function getSnippetAndLanguageByHashValue(string $hash_value): array
+    public static function getSnippetAndLanguageByHashValue(string $hash_value): mixed
     {
         $db = new MySQLWrapper();
         $stmt = $db->prepare("SELECT snippet, language FROM snippet WHERE hash_value = ? AND expired_at > CURRENT_TIMESTAMP");
@@ -33,7 +33,6 @@ class DatabaseHelper
         $stmt->execute();
         $result = $stmt->get_result();
         $arr = $result->fetch_row();
-        if (!$arr) throw new Exception('Could not find any snippet in database');
         return $arr;
     }
 
