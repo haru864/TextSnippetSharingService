@@ -3,8 +3,6 @@
 namespace Database;
 
 use Database\MySQLWrapper;
-use Exception;
-use Config\Config;
 
 class DatabaseHelper
 {

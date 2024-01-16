@@ -1,4 +1,8 @@
 <?php
+
+use Logging\Logger;
+use Logging\LogLevel;
+
 spl_autoload_extensions(".php");
 // autoloadはこのファイルを実行するプロセスの作業ディレクトリを基準にする
 spl_autoload_register(function ($class) {
@@ -11,15 +15,16 @@ spl_autoload_register(function ($class) {
     }
 });
 
-$DEBUG = true;
+$logger = Logger::getInstance();
+$logger->logRequest();
 
 $routes = include('Routing/routes.php');
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $path = ltrim($path, '/');
 
 if (isset($routes[$path])) {
-    $renderer = $routes[$path]();
     try {
+        $renderer = $routes[$path]();
         foreach ($renderer->getFields() as $name => $value) {
             $sanitized_value = filter_var($value, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
             if ($sanitized_value && $sanitized_value === $value) {
@@ -27,7 +32,7 @@ if (isset($routes[$path])) {
                 header("Access-Control-Allow-Origin: *");
             } else {
                 http_response_code(500);
-                if ($DEBUG) print("Failed setting header - original: '$value', sanitized: '$sanitized_value'");
+                print("Failed setting header - original: '$value', sanitized: '$sanitized_value'");
                 exit;
             }
             print($renderer->getContent());
@@ -35,7 +40,7 @@ if (isset($routes[$path])) {
     } catch (Exception $e) {
         http_response_code(500);
         print("Internal error, please contact the admin.<br>");
-        if ($DEBUG) print($e->getMessage());
+        $logger->log(LogLevel::ERROR, $e->getMessage());
     }
 } else {
     http_response_code(404);
