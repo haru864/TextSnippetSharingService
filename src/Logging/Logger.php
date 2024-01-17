@@ -52,6 +52,7 @@ class Logger
             'query' => $_SERVER['QUERY_STRING'] ?? '',
             'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'N/A',
             'ip_address' => $_SERVER['REMOTE_ADDR'] ?? 'N/A',
+            'message_body' => $_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : 'N/A',
         ];
         $this->log(LogLevel::INFO, 'Request received', ['request' => $requestInfo]);
     }

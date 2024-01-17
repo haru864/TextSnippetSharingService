@@ -1,8 +1,12 @@
-CREATE TABLE practice_db.snippet (
-    hash_value VARCHAR(64) PRIMARY KEY,
-    snippet TEXT NOT NULL,
-    language VARCHAR(20) NOT NULL,
-    registered_at DATETIME NOT NULL,
-    expired_at DATETIME NOT NULL
+CREATE TABLE IF NOT EXISTS `snippet` (
+  `hash_value` varchar(64) NOT NULL,
+  `snippet` text NOT NULL,
+  `language` varchar(20) NOT NULL,
+  `registered_at` datetime NOT NULL,
+  `expired_at` datetime NOT NULL,
+  PRIMARY KEY (`hash_value`)
 )
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci
 ;
