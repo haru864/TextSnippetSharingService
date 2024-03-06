@@ -6,7 +6,7 @@ use Database\MySQLWrapper;
 
 class DatabaseHelper
 {
-    public static function insertSnippet(string $hash_value, string $snippet, string $language, int $term_minute): void
+    public static function insertSnippet(string $hashValue, string $snippet, string $language, int $term_minute): void
     {
         $db = new MySQLWrapper();
         $stmt = $db->prepare("INSERT INTO snippet VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?) ON DUPLICATE KEY UPDATE registered_at = CURRENT_TIMESTAMP, expired_at = ?");
@@ -18,16 +18,16 @@ class DatabaseHelper
             $expired_date_int = strtotime("+{$term_minute} minutes", strtotime($current_date_str));
             $expired_date_str = date('Y-m-d H:i:s', $expired_date_int);
         }
-        $stmt->bind_param('sssss', $hash_value, $snippet, $language, $expired_date_str, $expired_date_str);
+        $stmt->bind_param('sssss', $hashValue, $snippet, $language, $expired_date_str, $expired_date_str);
         $stmt->execute();
         return;
     }
 
-    public static function getSnippetAndLanguageByHashValue(string $hash_value): mixed
+    public static function getSnippetAndLanguageByHashValue(string $hashValue): mixed
     {
         $db = new MySQLWrapper();
         $stmt = $db->prepare("SELECT snippet, language FROM snippet WHERE hash_value = ? AND expired_at > CURRENT_TIMESTAMP");
-        $stmt->bind_param('s', $hash_value,);
+        $stmt->bind_param('s', $hashValue,);
         $stmt->execute();
         $result = $stmt->get_result();
         $arr = $result->fetch_row();

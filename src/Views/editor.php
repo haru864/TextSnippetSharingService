@@ -28,23 +28,9 @@ $baseURL = Settings::env('BASE_URL');
     <div>
         programming language:
         <select id="language" required>
-            <option value="cpp" selected>cpp</option>
-            <option value="csharp">csharp</option>
-            <option value="dart">dart</option>
-            <option value="go">go</option>
-            <option value="java">java</option>
-            <option value="javascript">javascript</option>
-            <option value="kotlin">kotlin</option>
-            <option value="objective-c">objective-c</option>
-            <option value="perl">perl</option>
-            <option value="php">php</option>
-            <option value="python">python</option>
-            <option value="r">r</option>
-            <option value="ruby">ruby</option>
-            <option value="rust">rust</option>
-            <option value="scala">scala</option>
-            <option value="swift">swift</option>
-            <option value="typescript">typescript</option>
+            <?php foreach ($languages as $language) { ?>
+                <option value="<?= $language ?>"><?= $language ?></option>
+            <?php } ?>
         </select>
     </div>
     <div>
@@ -101,8 +87,8 @@ $baseURL = Settings::env('BASE_URL');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                const data = await response.json();
-                alert(data['url']);
+                const url = await response.text();
+                alert(url);
             } catch (error) {
                 console.error('Error:', error);
                 alert(`Error: ${error}`);

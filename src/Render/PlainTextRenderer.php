@@ -16,7 +16,7 @@ class PlainTextRenderer implements HTTPRenderer
 
     public function isStringContent(): bool
     {
-        return false;
+        return true;
     }
 
     public function getStatusCode(): int

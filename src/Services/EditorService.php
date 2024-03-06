@@ -2,38 +2,44 @@
 
 namespace Services;
 
+use Database\DatabaseHelper;
 use Exceptions\InternalServerException;
-use Exceptions\InvalidUmlException;
-use Models\PlantUMLDiagramGenerator;
+use Http\HttpRequest;
 use Settings\Settings;
+use Validate\ValidationHelper;
 
 class EditorService
 {
-    public function __construct()
-    {
-    }
-
     public function getEditorPageName(): string
     {
         return 'editor';
     }
 
-    public function generateDiagram(string $uml, string $extension): string
+    public function registerSnippet(HttpRequest $httpRequest): string
     {
-        try {
-            $diagramGenerator = new PlantUMLDiagramGenerator();
-            $imagaFilePath = $diagramGenerator->generateDiagram($uml, $extension);
-            return $imagaFilePath;
-        } catch (InvalidUmlException) {
-            // 操作性を確保するため、UMLの構文が誤っている場合は例エラーではなく専用の画像ファイルを返す。
-            $invalidUmlErrorImageFilePath = Settings::env('UML_ERROR_IMAGE_FILE_PATH');
-            $invalidUmlErrorImageFileName = basename($invalidUmlErrorImageFilePath);
-            $tmpDirPath = Settings::env('TMP_FILE_LOCATION');
-            $tmpInvalidUmlErrorImageFilePath = $tmpDirPath . DIRECTORY_SEPARATOR . $invalidUmlErrorImageFileName;
-            if (!copy($invalidUmlErrorImageFilePath, $tmpInvalidUmlErrorImageFilePath)) {
-                throw new InternalServerException('Failed to copy UML syntax error image.');
+        ValidationHelper::validateRegisterSnippetRerquest();
+        $snippet = $httpRequest->getTextParam('snippet');
+        $language = $httpRequest->getTextParam('language');
+        $termMinute = $httpRequest->getTextParam('term_minute');
+        $hashValue = $this->generateUniqueHashWithLimit($snippet . $language);
+        DatabaseHelper::insertSnippet($hashValue, $snippet, $language, $termMinute);
+        $baseURL = Settings::env("BASE_URL");
+        $url = "{$baseURL}/{$hashValue}";
+        return $url;
+    }
+
+    private function generateUniqueHashWithLimit(string $data, $limit = 100): string
+    {
+        $hash = hash('sha256', $data);
+        $counter = 0;
+        while ($counter < $limit) {
+            $registeredColumns = DatabaseHelper::getSnippetAndLanguageByHashValue($hash);
+            if (is_null($registeredColumns)) {
+                return $hash;
             }
-            return $tmpInvalidUmlErrorImageFilePath;
+            $counter++;
+            $hash = hash('sha256', $data . $counter);
         }
+        throw new InternalServerException('Failed to generate unique hash value.');
     }
 }

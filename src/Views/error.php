@@ -1,26 +1,29 @@
-<!doctype html>
+<?php
+
+use Settings\Settings;
+
+$baseURL = Settings::env("BASE_URL");
+?>
+
+<!DOCTYPE html>
 <html lang="ja">
 
 <head>
     <meta charset="UTF-8">
-    <title>Text Snippet Sharing Service</title>
-    <style>
-        .container {
-            display: flex;
-            align-items: center;
-        }
-
-        .container>div,
-        .buttons>button {
-            margin-bottom: 10px;
-        }
-    </style>
+    <title><?= $title ?></title>
+    <link rel="stylesheet" type="text/css" href="<?= $baseURL ?>/css/error" />
+    <link rel="stylesheet" type="text/css" href="<?= $baseURL ?>/css/common" />
 </head>
 
 <body>
-    <div>
-        Expired Snippet
-    </div>
+    <article>
+        <h1><?= $headline ?></h1>
+        <div>
+            <p><?= $message ?></p>
+            <p>&mdash; admin</p>
+        </div>
+    </article>
+    <button type=“button” onclick="location.href='<?= $baseURL ?>'">ホーム</button>
 </body>
 
 </html>

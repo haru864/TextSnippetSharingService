@@ -8,7 +8,6 @@ use Services\EditorService;
 use Http\HttpRequest;
 use Render\interface\HTTPRenderer;
 use Render\HTMLRenderer;
-use Render\ImageRenderer;
 use Render\PlainTextRenderer;
 use Validate\ValidationHelper;
 
@@ -31,18 +30,20 @@ class EditorController implements ControllerInterface
         } else if ($requestMethod === 'POST') {
             return $this->getSnippetUrl();
         } else {
-            throw new InvalidRequestMethodException("'GET' or 'POST' are allowed.");
+            throw new InvalidRequestMethodException("Invalid request method: 'GET' or 'POST' are allowed.");
         }
     }
 
     private function getEditorPage(): HTMLRenderer
     {
         $editorFileBasename = $this->editorService->getEditorPageName();
-        return new HTMLRenderer(200, $editorFileBasename, []);
+        $languages = ValidationHelper::getAvailableLanguages();
+        return new HTMLRenderer(200, $editorFileBasename, ['languages' => $languages]);
     }
 
     private function getSnippetUrl(): PlainTextRenderer
     {
-        
+        $url = $this->editorService->registerSnippet($this->httpRequest);
+        return new PlainTextRenderer($url);
     }
 }
