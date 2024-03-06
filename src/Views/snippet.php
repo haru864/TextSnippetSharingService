@@ -1,3 +1,10 @@
+<?php
+
+use Settings\Settings;
+
+$baseURL = Settings::env("BASE_URL");
+?>
+
 <!doctype html>
 <html lang="ja">
 
@@ -24,6 +31,7 @@
     <div class="container">
         <div id="editor" style="width:800px;height:600px;border:1px solid grey"></div>
     </div>
+    <button type=“button” onclick="location.href='<?= $baseURL ?>'">ホーム</button>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
     <script>
         require.config({

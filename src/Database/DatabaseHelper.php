@@ -3,6 +3,7 @@
 namespace Database;
 
 use Database\MySQLWrapper;
+use Exceptions\InternalServerException;
 
 class DatabaseHelper
 {
@@ -23,15 +24,32 @@ class DatabaseHelper
         return;
     }
 
-    public static function getSnippetAndLanguageByHashValue(string $hashValue): mixed
+    public static function getSnippet(string $hashValue): ?string
     {
         $db = new MySQLWrapper();
-        $stmt = $db->prepare("SELECT snippet, language FROM snippet WHERE hash_value = ? AND expired_at > CURRENT_TIMESTAMP");
+        $stmt = $db->prepare("SELECT snippet FROM snippet WHERE hash_value = ? AND expired_at > CURRENT_TIMESTAMP");
         $stmt->bind_param('s', $hashValue,);
         $stmt->execute();
         $result = $stmt->get_result();
         $arr = $result->fetch_row();
-        return $arr;
+        if ($arr === false) {
+            throw new InternalServerException("Query 'getSnippet' failed.");
+        }
+        return $arr ? $arr[0] : null;
+    }
+
+    public static function getLanguage(string $hashValue): ?string
+    {
+        $db = new MySQLWrapper();
+        $stmt = $db->prepare("SELECT language FROM snippet WHERE hash_value = ? AND expired_at > CURRENT_TIMESTAMP");
+        $stmt->bind_param('s', $hashValue,);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $arr = $result->fetch_row();
+        if ($arr === false) {
+            throw new InternalServerException("Query 'getLanguage' failed.");
+        }
+        return $arr ? $arr[0] : null;
     }
 
     public static function deleteExpiredSnippets(): void

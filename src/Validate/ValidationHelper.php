@@ -7,6 +7,29 @@ use Exceptions\InvalidRequestParameterException;
 
 class ValidationHelper
 {
+    public static function getAvailableLanguages(): array
+    {
+        return [
+            'cpp',
+            'csharp',
+            'dart',
+            'go',
+            'java',
+            'javascript',
+            'kotlin',
+            'objective-c',
+            'perl',
+            'php',
+            'python',
+            'r',
+            'ruby',
+            'rust',
+            'scala',
+            'swift',
+            'typescript'
+        ];
+    }
+
     public static function validateRegisterSnippetRerquest(): void
     {
         $expectedContentType = 'application/x-www-form-urlencoded';
@@ -31,28 +54,5 @@ class ValidationHelper
         if (!in_array($_POST['term_minute'], $availableTermMinute)) {
             throw new InvalidRequestParameterException("Invalid term_minute.");
         }
-    }
-
-    public static function getAvailableLanguages(): array
-    {
-        return [
-            'cpp',
-            'csharp',
-            'dart',
-            'go',
-            'java',
-            'javascript',
-            'kotlin',
-            'objective-c',
-            'perl',
-            'php',
-            'python',
-            'r',
-            'ruby',
-            'rust',
-            'scala',
-            'swift',
-            'typescript'
-        ];
     }
 }

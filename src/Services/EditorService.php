@@ -4,6 +4,7 @@ namespace Services;
 
 use Database\DatabaseHelper;
 use Exceptions\InternalServerException;
+use Exceptions\InvalidRequestURIException;
 use Http\HttpRequest;
 use Settings\Settings;
 use Validate\ValidationHelper;
@@ -13,6 +14,11 @@ class EditorService
     public function getEditorPageName(): string
     {
         return 'editor';
+    }
+
+    public function getSnippetPageName(): string
+    {
+        return 'snippet';
     }
 
     public function registerSnippet(HttpRequest $httpRequest): string
@@ -28,13 +34,31 @@ class EditorService
         return $url;
     }
 
+    public function getSnippetFromDatabase(string $hashValue): string
+    {
+        $registeredSnippet = DatabaseHelper::getSnippet($hashValue);
+        if (is_null($registeredSnippet)) {
+            return new InvalidRequestURIException('The snippet associated with the specified URL does not exist.');
+        }
+        return $registeredSnippet;
+    }
+
+    public function getLanguageFromDatabase(string $hashValue): string
+    {
+        $registeredLanguage = DatabaseHelper::getLanguage($hashValue);
+        if (is_null($registeredLanguage)) {
+            return new InvalidRequestURIException('The snippet associated with the specified URL does not exist.');
+        }
+        return $registeredLanguage;
+    }
+
     private function generateUniqueHashWithLimit(string $data, $limit = 100): string
     {
         $hash = hash('sha256', $data);
         $counter = 0;
         while ($counter < $limit) {
-            $registeredColumns = DatabaseHelper::getSnippetAndLanguageByHashValue($hash);
-            if (is_null($registeredColumns)) {
+            $registeredSnippet = DatabaseHelper::getSnippet($hash);
+            if (is_null($registeredSnippet)) {
                 return $hash;
             }
             $counter++;
