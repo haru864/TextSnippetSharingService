@@ -1,3 +1,10 @@
+<?php
+
+use Settings\Settings;
+
+$baseURL = Settings::env('BASE_URL');
+?>
+
 <!doctype html>
 <html lang="ja">
 
@@ -46,11 +53,10 @@
             <option value="10" selected>10 minutes</option>
             <option value="60">1 hours</option>
             <option value="1440">1 day</option>
-            <option value="-1">permanence</option>
         </select>
     </div>
     <div class="container">
-        <div id="editor" style="width:800px;height:600px;border:1px solid grey"></div>
+        <div id="editor" style="width:800px; height:600px; border:1px solid grey;"></div>
     </div>
     <button type="button" id="submit-btn">Submit</button>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
@@ -85,7 +91,7 @@
                     formBody.push(encodedKey + "=" + encodedValue);
                 }
                 formBody = formBody.join("&");
-                const response = await fetch('http://localhost:8000/TextSnippetSharingService/register', {
+                const response = await fetch('<?= $baseURL ?>', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'

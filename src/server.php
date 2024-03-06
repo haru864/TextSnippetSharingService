@@ -1,48 +1,59 @@
 <?php
-
-use Logging\Logger;
-use Logging\LogLevel;
-
 spl_autoload_extensions(".php");
-// autoloadはこのファイルを実行するプロセスの作業ディレクトリを基準にする
 spl_autoload_register(function ($class) {
     $class = str_replace("\\", "/", $class);
-    $file = $class . '.php';
-    // file_put_contents(__DIR__ . "/../test/debug.txt", $file);
-    // echo $file;
+    $file = __DIR__ . "/" . $class . '.php';
     if (file_exists($file)) {
         require_once $file;
     }
 });
 
-$logger = Logger::getInstance();
-$logger->logRequest();
+use Logging\Logger;
+use Http\HttpRequest;
+use Http\HttpResponse;
+use Exceptions\interface\UserVisibleException;
+use Render\HTMLRenderer;
+use Settings\Settings;
 
-$routes = include('Routing/routes.php');
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$path = ltrim($path, '/');
-
-if (isset($routes[$path])) {
-    try {
-        $renderer = $routes[$path]();
-        foreach ($renderer->getFields() as $name => $value) {
-            $sanitized_value = filter_var($value, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-            if ($sanitized_value && $sanitized_value === $value) {
-                header("{$name}: {$sanitized_value}");
-                header("Access-Control-Allow-Origin: *");
-            } else {
-                http_response_code(500);
-                print("Failed setting header - original: '$value', sanitized: '$sanitized_value'");
-                exit;
-            }
-            print($renderer->getContent());
+try {
+    date_default_timezone_set(Settings::env("TIMEZONE"));
+    $logger = Logger::getInstance();
+    $logger->logRequest();
+    $httpRequest = new HttpRequest();
+    $routes = include('Routing/routes.php');
+    $renderer = null;
+    foreach ($routes as $uriPattern => $controller) {
+        if (preg_match($uriPattern, $httpRequest->getURI())) {
+            $renderer = $controller->assignProcess();
         }
-    } catch (Exception $e) {
-        http_response_code(500);
-        print("Internal error, please contact the admin.<br>");
-        $logger->log(LogLevel::ERROR, $e->getMessage());
     }
-} else {
-    http_response_code(404);
-    echo "404 Not Found: The requested route was not found on this server.";
+    if (is_null($renderer)) {
+        $htmlElems = [
+            'title' => '404 Not Found',
+            'headline' => '404 Not Found',
+            'message' => 'The requested route was not found on this server.'
+        ];
+        $httpResponse = new HttpResponse(new HTMLRenderer(404, 'error', $htmlElems));
+    } else {
+        $httpResponse = new HttpResponse($renderer);
+    }
+} catch (UserVisibleException $e) {
+    $htmlElems = [
+        'title' => '400 Bad Request',
+        'headline' => '400 Bad Request',
+        'message' => $e->displayErrorMessage()
+    ];
+    $httpResponse = new HttpResponse(new HTMLRenderer(400, 'error', $htmlElems));
+    $logger->logError($e);
+} catch (Throwable $e) {
+    $htmlElems = [
+        'title' => '500 Internal Server Error',
+        'headline' => '500 Internal Server Error',
+        'message' => 'Internal error, please contact the admin.'
+    ];
+    $httpResponse = new HttpResponse(new HTMLRenderer(500, 'error', $htmlElems));
+    $logger->logError($e);
+} finally {
+    $httpResponse->send();
+    $logger->logResponse($httpResponse);
 }

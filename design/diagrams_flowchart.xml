@@ -1,0 +1,52 @@
+<mxfile host="app.diagrams.net" modified="2024-03-05T16:45:50.147Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" etag="4-igzepJsT5C-PSnzDXD" version="24.0.1" type="device">
+  <diagram name="ページ1" id="t9-IQi9WbtsyUzI4Pda-">
+    <mxGraphModel dx="2901" dy="1119" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="oXo6wrKH2NRLCijJtab5-1" value="ユーザー" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="-340" y="570" width="180" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="oXo6wrKH2NRLCijJtab5-3" value="editor.php" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="100" y="408" width="180" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="oXo6wrKH2NRLCijJtab5-4" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.875;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="oXo6wrKH2NRLCijJtab5-1" target="oXo6wrKH2NRLCijJtab5-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-40" y="490" as="sourcePoint" />
+            <mxPoint x="10" y="440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oXo6wrKH2NRLCijJtab5-5" value="&lt;div&gt;# エディター取得&lt;/div&gt;https://snippetshare.haru864.com&lt;div&gt;メソッド：GET&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;＞ レスポンス&lt;/div&gt;&lt;div&gt;200&lt;/div&gt;&lt;div style=&quot;&quot;&gt;Content-Type: text/html&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry y="190" width="260" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="oXo6wrKH2NRLCijJtab5-6" value="snippet.php" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="100" y="580" width="180" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="oXo6wrKH2NRLCijJtab5-7" value="error&lt;span style=&quot;background-color: initial;&quot;&gt;.php&lt;/span&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="100" y="760" width="180" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="oXo6wrKH2NRLCijJtab5-8" value="&lt;div&gt;# スニペット登録&lt;/div&gt;https://snippetshare.haru864.com&lt;div&gt;メソッド：POST&lt;/div&gt;&lt;div&gt;Content-Type:&amp;nbsp;application/x-www-form-urlencoded&lt;/div&gt;&lt;div&gt;{&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &#39;snippet&#39;: スニペット,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &#39;language&#39;: 選択言語,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &#39;term_minute&#39;: 制限時間(分)&lt;/div&gt;&lt;div&gt;}&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;＞ レスポンス&lt;/div&gt;&lt;div&gt;200&lt;/div&gt;&lt;div style=&quot;&quot;&gt;Content-Type: text/plain&lt;/div&gt;&lt;div style=&quot;&quot;&gt;https://snippetshare.haru864.com/{hash}&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="360" y="220" width="360" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="oXo6wrKH2NRLCijJtab5-10" value="&lt;div&gt;# スニペット表示&lt;/div&gt;https://snippetshare.haru864.com/{hash}&lt;div&gt;メソッド：GET&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;＞ レスポンス&lt;/div&gt;&lt;div&gt;200&lt;/div&gt;&lt;div style=&quot;&quot;&gt;Content-Type: text/html&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="370" y="530" width="290" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="oXo6wrKH2NRLCijJtab5-12" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.875;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="oXo6wrKH2NRLCijJtab5-1" target="oXo6wrKH2NRLCijJtab5-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-172" y="635" as="sourcePoint" />
+            <mxPoint x="110" y="476" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oXo6wrKH2NRLCijJtab5-13" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.875;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="oXo6wrKH2NRLCijJtab5-1" target="oXo6wrKH2NRLCijJtab5-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-172" y="635" as="sourcePoint" />
+            <mxPoint x="110" y="648" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oXo6wrKH2NRLCijJtab5-14" value="&lt;div&gt;# エラー画面&lt;/div&gt;&lt;div&gt;期限切れとかリクエストエラーとか、&lt;/div&gt;&lt;div&gt;ユーザーに見せられるエラーを通知する。&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="370" y="750" width="310" height="140" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

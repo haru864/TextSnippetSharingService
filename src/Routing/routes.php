@@ -1,34 +1,24 @@
 <?php
 
-use Database\DatabaseHelper;
-use Validate\ValidationHelper;
-use Render\interface\HTTPRenderer;
-use Render\HTMLRenderer;
-use Render\JSONRenderer;
+use Controllers\EditorController;
+use Controllers\StaticFileController;
+use Http\HttpRequest;
+use Services\EditorService;
+use Services\StaticFileService;
+use Settings\Settings;
 
-DatabaseHelper::deleteExpiredSnippets();
+$httpRequest = new HttpRequest();
+$editorService = new EditorService();
+$staticFileService = new StaticFileService();
+$editorController = new EditorController($editorService, $httpRequest);
+$staticFileController = new StaticFileController($staticFileService, $httpRequest);
+
+$URL_DIR_PATTERN_GET_EDITOR = Settings::env("URL_DIR_PATTERN_GET_EDITOR");
+$URL_DIR_PATTERN_GET_SNIPPET = Settings::env("URL_DIR_PATTERN_GET_SNIPPET");
+$URL_DIR_PATTERN_STATIC_FILE = Settings::env("URL_DIR_PATTERN_STATIC_FILE");
 
 return [
-    'TextSnippetSharingService/editor' => function (): HTTPRenderer {
-        return new HTMLRenderer('editor', []);
-    },
-    'TextSnippetSharingService/register' => function (): HTTPRenderer {
-        $snippet = ValidationHelper::string($_POST['snippet'] ?? null);
-        $language = ValidationHelper::string($_POST['language'] ?? null);
-        $term_minute = $_POST['term_minute'] ? intval($_POST['term_minute']) : null;
-        $hash_value = hash('sha256', $snippet);
-        DatabaseHelper::insertSnippet($hash_value, $snippet, $language, $term_minute);
-        $url = "http://localhost:8000/TextSnippetSharingService/display?hash={$hash_value}";
-        return new JSONRenderer(['url' => $url]);
-    },
-    'TextSnippetSharingService/display' => function (): HTTPRenderer {
-        $hash_value = ValidationHelper::string($_GET['hash'] ?? null);
-        $result = DatabaseHelper::getSnippetAndLanguageByHashValue($hash_value);
-        if (!$result) {
-            return new HTMLRenderer('expired', []);
-        }
-        $snippet = $result[0];
-        $language = $result[1];
-        return new HTMLRenderer('snippet', ['snippet' => $snippet, 'language' => $language]);
-    }
+    $URL_DIR_PATTERN_GET_EDITOR => $editorController,
+    $URL_DIR_PATTERN_GET_SNIPPET => $editorController,
+    $URL_DIR_PATTERN_STATIC_FILE => $staticFileController
 ];

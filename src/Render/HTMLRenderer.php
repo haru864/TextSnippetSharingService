@@ -2,17 +2,29 @@
 
 namespace Render;
 
-use Render\interface\HTTPRenderer;
+use Render\Interface\HTTPRenderer;
 
 class HTMLRenderer implements HTTPRenderer
 {
+    private int $statusCode;
     private string $viewFile;
     private array $data;
 
-    public function __construct(string $viewFile, array $data = [])
+    public function __construct(int $statusCode, string $viewFile, array $data = [])
     {
+        $this->statusCode = $statusCode;
         $this->viewFile = $viewFile;
         $this->data = $data;
+    }
+
+    public function isStringContent(): bool
+    {
+        return true;
+    }
+
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
     }
 
     public function getFields(): array
@@ -36,6 +48,6 @@ class HTMLRenderer implements HTTPRenderer
 
     private function getViewPath(string $path): string
     {
-        return sprintf("%s/%s/View/%s.php", __DIR__, '..', $path);
+        return sprintf("%s/%s/Views/%s.php", __DIR__, '..', $path);
     }
 }

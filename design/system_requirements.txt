@@ -6,3 +6,13 @@ IDをクエリストリングで指定することで、対応するスニペッ
 http://localhost:8000/TextSnippetSharingService/editor
 http://localhost:8000/TextSnippetSharingService/snippet?id=<hash>
 
+# マイグレーションコマンド
+php console.php code-gen migration --name CreatePost
+php console.php migrate --init
+php console.php migrate
+
+# 設定ファイル
+.env        データベース名、認証情報
+.public.env 上記以外の設定
+
+
