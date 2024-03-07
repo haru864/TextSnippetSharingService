@@ -11,6 +11,7 @@ class ValidationHelper
     public static function getAvailableLanguages(): array
     {
         return [
+            'plaintext',
             'cpp',
             'csharp',
             'dart',
