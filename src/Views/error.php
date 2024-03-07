@@ -11,8 +11,6 @@ $baseURL = Settings::env("BASE_URL");
 <head>
     <meta charset="UTF-8">
     <title><?= $title ?></title>
-    <link rel="stylesheet" type="text/css" href="<?= $baseURL ?>/css/error" />
-    <link rel="stylesheet" type="text/css" href="<?= $baseURL ?>/css/common" />
 </head>
 
 <body>

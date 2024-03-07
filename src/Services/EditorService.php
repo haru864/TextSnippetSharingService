@@ -38,7 +38,7 @@ class EditorService
     {
         $registeredSnippet = DatabaseHelper::getSnippet($hashValue);
         if (is_null($registeredSnippet)) {
-            return new InvalidRequestURIException('The snippet associated with the specified URL does not exist.');
+            throw new InvalidRequestURIException('The snippet associated with the specified URL does not exist.');
         }
         return $registeredSnippet;
     }
@@ -47,7 +47,7 @@ class EditorService
     {
         $registeredLanguage = DatabaseHelper::getLanguage($hashValue);
         if (is_null($registeredLanguage)) {
-            return new InvalidRequestURIException('The snippet associated with the specified URL does not exist.');
+            throw new InvalidRequestURIException('The snippet associated with the specified URL does not exist.');
         }
         return $registeredLanguage;
     }

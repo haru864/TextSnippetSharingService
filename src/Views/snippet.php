@@ -11,22 +11,12 @@ $baseURL = Settings::env("BASE_URL");
 <head>
     <meta charset="UTF-8">
     <title>Text Snippet Sharing Service</title>
-    <style>
-        .container {
-            display: flex;
-            align-items: center;
-        }
-
-        .container>div,
-        .buttons>button {
-            margin-bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="<?= $baseURL ?>/css/snippet" />
 </head>
 
 <body>
     <div>
-        language: <?php echo $language; ?>
+        Language: <?php echo $language; ?>
     </div>
     <div class="container">
         <div id="editor" style="width:800px;height:600px;border:1px solid grey"></div>
@@ -34,18 +24,10 @@ $baseURL = Settings::env("BASE_URL");
     <button type=“button” onclick="location.href='<?= $baseURL ?>'">ホーム</button>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
     <script>
-        require.config({
-            paths: {
-                'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs'
-            }
-        });
-        require(['vs/editor/editor.main'], function() {
-            window.editor = monaco.editor.create(document.getElementById('editor'), {
-                value: <?php echo json_encode($snippet); ?>,
-                language: '<?php echo $language; ?>'
-            });
-        });
+        const SNIPPET = `<?= $snippet ?>`;
+        const LANGUAGE = '<?= $language ?>';
     </script>
+    <script src="<?= $baseURL ?>/js/snippet"></script>
 </body>
 
 </html>

@@ -56,6 +56,9 @@ class DatabaseHelper
     {
         $db = new MySQLWrapper();
         $stmt = $db->prepare("DELETE FROM snippet WHERE expired_at <= CURRENT_TIMESTAMP");
-        $stmt->execute();
+        $result = $stmt->execute();
+        if (!$result) {
+            throw new InternalServerException("Query 'deleteExpiredSnippets' failed.");
+        }
     }
 }

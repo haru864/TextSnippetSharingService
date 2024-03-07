@@ -31,7 +31,7 @@ try {
         $htmlElems = [
             'title' => '404 Not Found',
             'headline' => '404 Not Found',
-            'message' => 'The requested route was not found on this server.'
+            'message' => 'There is no content associated with the specified URL.'
         ];
         $httpResponse = new HttpResponse(new HTMLRenderer(404, 'error', $htmlElems));
     } else {

@@ -51,6 +51,7 @@ class EditorController implements ControllerInterface
 
     private function getSnippetPage()
     {
+        include(__DIR__ . '/../Batch/DeleteExpiredRecords.php');
         $snippetFileBasename = $this->editorService->getSnippetPageName();
         $snippet = $this->editorService->getSnippetFromDatabase($this->httpRequest->getTopDir());
         $language = $this->editorService->getLanguageFromDatabase($this->httpRequest->getTopDir());
